@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HÁT Balaton — Apartment Portrait</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── LIGHT THEME (default) ── */
+    :root {
+      --bg:         #F6F2EA;
+      --bg-alt:     #ECE7DD;
+      --bg-card:    #FBF8F1;
+      --text:       #24221E;
+      --text-mid:   #746E63;
+      --border:     #DDD5C8;
+      --teal:       #2D6671;
+      --teal-dim:   #E3ECEA;
+      --clay:       #A66B55;
+      --reed:       #737D59;
+      --inv-bg:     #1B1A17;
+      --inv-text:   #F4F1EA;
+      --inv-mid:    rgba(244,241,234,0.68);
+      --inv-border: rgba(244,241,234,0.16);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+
+    /* ── DARK THEME ── */
+    body.dark {
+      --bg:         #24231F;
+      --bg-alt:     #2D2B26;
+      --bg-card:    #343129;
+      --text:       #F4F1EA;
+      --text-mid:   #C5BFB2;
+      --border:     #4A453B;
+      --teal:       #85D0DE;
+      --teal-dim:   #2B3A39;
+      --clay:       #D39880;
+      --reed:       #C0C99A;
+      --inv-bg:     #1B1A17;
+      --inv-text:   #F4F1EA;
+      --inv-mid:    rgba(244,241,234,0.68);
+      --inv-border: rgba(244,241,234,0.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 300;
+      transition: background 0.35s, color 0.35s;
+    }
+
+    /* Language visibility */
+    body.lang-en .hu, body.lang-en .ro, body.lang-en .de { display: none !important; }
+    body.lang-hu .en, body.lang-hu .ro, body.lang-hu .de { display: none !important; }
+    body.lang-ro .en, body.lang-ro .hu, body.lang-ro .de { display: none !important; }
+    body.lang-de .en, body.lang-de .hu, body.lang-de .ro { display: none !important; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      transition: background 0.4s, padding 0.4s, border-color 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(246,242,234,0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    body.dark nav.scrolled {
+      background: rgba(12,12,10,0.96);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.4s;
+    }
+    nav.scrolled .nav-logo { color: var(--text); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--teal) !important; }
+    .nav-links a.nav-cta {
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 3px;
+    }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 28px;
+      height: 22px;
+      color: rgba(255,255,255,0.8);
+      position: relative;
+    }
+    nav.scrolled .menu-btn { color: var(--text); }
+    .menu-btn span,
+    .menu-btn::before,
+    .menu-btn::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: currentColor;
+      transition: transform 0.25s, opacity 0.25s, top 0.25s;
+    }
+    .menu-btn::before { top: 3px; }
+    .menu-btn span { top: 10px; }
+    .menu-btn::after { top: 17px; }
+    nav.menu-open .menu-btn::before { top: 10px; transform: rotate(38deg); }
+    nav.menu-open .menu-btn span { opacity: 0; }
+    nav.menu-open .menu-btn::after { top: 10px; transform: rotate(-38deg); }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.45);
+      padding: 3px 5px;
+      border-radius: 2px;
+      transition: color 0.25s, background 0.25s;
+    }
+    nav.scrolled .lang-btn { color: var(--text-mid); }
+    .lang-btn.active {
+      color: #fff;
+      font-weight: 500;
+    }
+    nav.scrolled .lang-btn.active { color: var(--text); }
+    .lang-btn:hover { color: rgba(255,255,255,0.85) !important; }
+    nav.scrolled .lang-btn:hover { color: var(--teal) !important; }
+
+    .nav-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.4s;
+    }
+    nav.scrolled .nav-sep { background: var(--border); }
+
+    .theme-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.55);
+      font-size: 15px;
+      line-height: 1;
+      padding: 3px 4px;
+      transition: color 0.25s, transform 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    nav.scrolled .theme-btn { color: var(--text-mid); }
+    .theme-btn:hover { color: rgba(255,255,255,0.9) !important; transform: rotate(12deg); }
+    nav.scrolled .theme-btn:hover { color: var(--teal) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 560px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px clamp(40px, 7vh, 88px);
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.15) 0%,
+        rgba(0,0,0,0.05) 35%,
+        rgba(0,0,0,0.5) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(72px, 11vw, 140px);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: 0;
+    }
+    .hero-sub {
+      font-family: var(--serif);
+      font-size: clamp(16px, 2.5vw, 26px);
+      font-weight: 300;
+      font-style: italic;
+      margin-top: 16px;
+      opacity: 0.85;
+      max-width: 640px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .hero-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.65);
+      padding-bottom: 5px;
+      transition: opacity 0.3s, border-color 0.3s;
+    }
+    .hero-link:hover {
+      opacity: 0.72;
+      border-color: rgba(255,255,255,0.25);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: clamp(16px, 3vh, 32px);
+      right: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.35);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.7; transform: scaleY(0.7); }
+    }
+
+    /* ── COMMON SECTION STYLES ── */
+    section { padding: 96px 48px; transition: background 0.35s; }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--text);
+    }
+    .section-rule {
+      width: 36px;
+      height: 1px;
+      background: var(--teal);
+      margin: 28px 0;
+      opacity: 0.6;
+    }
+
+    /* ── INTRO ── */
+    #intro {
+      background: var(--bg);
+      padding: 88px 48px 52px;
+    }
+    .intro-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 72px;
+      align-items: end;
+    }
+    .intro-kicker {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--reed);
+    }
+    .intro-statement {
+      font-family: var(--serif);
+      font-size: clamp(30px, 4.4vw, 56px);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--text);
+    }
+    .intro-note {
+      color: var(--text-mid);
+      max-width: 520px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .about-text p {
+      color: var(--text-mid);
+      max-width: 520px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .about-text p + p { margin-top: 16px; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+    .stat {
+      background: var(--bg-card);
+      padding: 36px 28px;
+      text-align: center;
+      transition: background 0.35s;
+    }
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 52px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-unit { font-size: 15px; font-weight: 300; }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-top: 8px;
+    }
+
+    /* ── HIGHLIGHTS STRIP ── */
+    #highlights {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      transition: background 0.35s;
+      overflow-x: auto;
+    }
+    .hl-item {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 36px 32px;
+      min-width: 200px;
+    }
+    .hl-icon {
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1;
+      color: var(--teal);
+      padding-top: 5px;
+      flex-shrink: 0;
+      min-width: 24px;
+    }
+    .hl-title {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .hl-sub {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+    .hl-sep {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+    @media (max-width: 960px) {
+      #highlights { flex-direction: column; }
+      .hl-sep { width: auto; height: 1px; }
+      .hl-item { padding: 28px 24px; min-width: unset; }
+    }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--bg-alt); padding: 80px 0; }
+    .gallery-header { padding: 0 48px; margin-bottom: 56px; }
+    .room-section { margin-bottom: 72px; }
+    .room-title {
+      font-family: var(--serif);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      padding: 0 48px;
+      margin-bottom: 16px;
+    }
+    .room-grid {
+      display: grid;
+      gap: 4px;
+      padding: 0 48px;
+    }
+    .room-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .room-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .room-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .room-grid.triptych { grid-template-columns: 1.35fr 0.9fr 0.9fr; }
+    .room-grid.mosaic-4 {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 320px 320px;
+    }
+    .room-grid.featured {
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .room-grid.featured .img-wrap:first-child { grid-row: span 2; }
+
+    .img-wrap {
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--border);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    }
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
+    }
+    body.dark .img-wrap img { filter: brightness(0.96); }
+    .img-wrap:hover img {
+      transform: scale(1.05);
+      filter: brightness(1) !important;
+    }
+    .room-grid.cols-4 .img-wrap  { height: 240px; }
+    .room-grid.cols-3 .img-wrap  { height: 300px; }
+    .room-grid.cols-2 .img-wrap  { height: 360px; }
+    .room-grid.triptych .img-wrap { height: 360px; }
+    .room-grid.mosaic-4 .img-wrap { height: 100%; }
+    .room-grid.featured .img-wrap { height: 244px; }
+    .room-grid.featured .img-wrap:first-child { height: 492px; }
+
+    /* ── SHORELINE ── */
+    #shoreline {
+      background: var(--bg);
+      padding: 104px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .shoreline-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .shoreline-text p:not(.section-label) {
+      color: var(--text-mid);
+      max-width: 520px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .shoreline-text p + p { margin-top: 16px; }
+    .shoreline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 270px 270px;
+      gap: 4px;
+    }
+    .shoreline-grid .img-wrap {
+      height: 100%;
+    }
+    .shoreline-grid .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--teal-dim); }
+    .features-inner { max-width: 1280px; margin: 0 auto; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 48px;
+      background: var(--border);
+    }
+    .feature {
+      background: var(--teal-dim);
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: background 0.35s;
+    }
+    body.dark .feature { background: var(--bg-card); }
+    .feature-icon {
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1;
+      color: var(--teal);
+      letter-spacing: 0.08em;
+    }
+    .feature-name {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .feature-desc { font-size: 12px; color: var(--text-mid); line-height: 1.65; }
+
+    /* ── NEARBY ── */
+    #nearby {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .nearby-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .nearby-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+    .nearby-item {
+      background: var(--bg-card);
+      padding: 30px 28px;
+      min-height: 164px;
+      transition: background 0.35s;
+    }
+    body.dark .nearby-item { background: var(--bg-card); }
+    .nearby-meta {
+      display: block;
+      color: var(--teal);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .nearby-item strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 9px;
+    }
+    .nearby-item span:last-child {
+      display: block;
+      color: var(--text-mid);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    /* ── STAY NOTES ── */
+    #stay-notes {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stay-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .stay-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+    .stay-item {
+      background: var(--bg-card);
+      padding: 28px;
+      min-height: 140px;
+      transition: background 0.35s;
+    }
+    .stay-item strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .stay-item span {
+      display: block;
+      color: var(--text-mid);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    /* ── LOCATION ── */
+    #location {
+      background: var(--bg);
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .location-text p {
+      color: var(--text-mid);
+      font-size: 15px;
+      line-height: 1.9;
+      max-width: 480px;
+    }
+    .location-text p + p { margin-top: 16px; }
+    .location-text strong { color: var(--text); font-weight: 500; }
+    .location-map {
+      height: 440px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .location-map iframe {
+      width: 100%; height: 100%;
+      border: none;
+      filter: grayscale(0.25) contrast(1.05);
+    }
+    body.dark .location-map iframe { filter: grayscale(0.35) brightness(0.9) contrast(1.05); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--inv-bg);
+      color: var(--inv-text);
+      text-align: center;
+      padding: 104px 48px;
+      transition: background 0.35s;
+    }
+    #contact .section-label { color: var(--inv-mid); letter-spacing: 0.32em; }
+    #contact h2 {
+      color: var(--inv-text);
+      margin: 0 auto;
+      max-width: none;
+    }
+    #contact .section-rule {
+      background: var(--inv-border);
+      margin: 28px auto;
+      opacity: 1;
+    }
+    .contact-name {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      color: var(--inv-text);
+    }
+    .contact-phone {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--inv-text);
+      text-decoration: none;
+      transition: opacity 0.3s;
+      display: block;
+    }
+    .contact-phone:hover { opacity: 0.6; }
+    .contact-email {
+      display: block;
+      color: var(--inv-mid);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      margin-top: 8px;
+      transition: opacity 0.3s;
+      overflow-wrap: anywhere;
+    }
+    .contact-email:hover { opacity: 0.7; }
+    .contact-people {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 28px;
+      max-width: 760px;
+      margin: 34px auto 0;
+    }
+    .contact-person {
+      border-top: 1px solid var(--inv-border);
+      padding: 28px 18px 0;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 26px;
+      margin-top: 26px;
+      flex-wrap: wrap;
+    }
+    .contact-links a {
+      color: var(--inv-text);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--inv-border);
+      padding-bottom: 5px;
+      transition: opacity 0.3s, border-color 0.3s;
+    }
+    .contact-links a:hover {
+      opacity: 0.7;
+      border-color: var(--inv-mid);
+    }
+    .contact-address {
+      margin-top: 28px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--inv-mid);
+      opacity: 0.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--inv-bg);
+      border-top: 1px solid var(--inv-border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.35s;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      color: var(--inv-mid);
+    }
+    .footer-copy {
+      font-size: 10px;
+      color: var(--inv-mid);
+      opacity: 0.45;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.96);
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 88vw;
+      max-height: 88vh;
+      object-fit: contain;
+      user-select: none;
+    }
+    .lb-close {
+      position: absolute;
+      top: 22px; right: 28px;
+      color: rgba(255,255,255,0.5);
+      font-size: 30px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .lb-close:hover { color: #fff; }
+    .lb-prev, .lb-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      font-size: 44px;
+      cursor: pointer;
+      padding: 16px;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .lb-prev:hover, .lb-next:hover { color: #fff; }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+
+    /* ── BACK TO TOP ── */
+    .to-top {
+      position: fixed;
+      right: 26px;
+      bottom: 28px;
+      z-index: 90;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      background: rgba(246,242,234,0.9);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.25s, transform 0.25s, background 0.25s, color 0.25s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.dark .to-top {
+      background: rgba(36,35,31,0.9);
+    }
+    .to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .to-top:hover {
+      background: var(--teal);
+      color: var(--bg-card);
+    }
+
+    /* ── FADE IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 960px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .menu-btn { display: block; }
+      .nav-links {
+        position: fixed;
+        top: 64px;
+        left: 16px;
+        right: 16px;
+        display: grid;
+        gap: 0;
+        padding: 12px 0;
+        background: rgba(250,250,248,0.98);
+        border: 1px solid var(--border);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.25s, transform 0.25s;
+      }
+      body.dark .nav-links { background: rgba(36,35,31,0.98); }
+      nav.menu-open .nav-links {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .nav-links a,
+      nav.scrolled .nav-links a {
+        color: var(--text);
+        padding: 12px 18px;
+      }
+      .nav-links a.nav-cta {
+        border-bottom: none;
+        color: var(--teal);
+      }
+      section { padding: 72px 24px; }
+      #intro { padding: 72px 24px 32px; }
+      .intro-inner { grid-template-columns: 1fr; gap: 28px; }
+      #about { grid-template-columns: 1fr; gap: 48px; padding: 72px 24px; }
+      .about-stats { max-width: 400px; }
+      .gallery-header, .room-title, .room-grid { padding-left: 24px; padding-right: 24px; }
+      #shoreline { padding: 72px 24px; }
+      .shoreline-inner { grid-template-columns: 1fr; gap: 40px; }
+      .shoreline-grid { grid-template-rows: 240px 240px; }
+      .room-grid.featured,
+      .room-grid.triptych,
+      .room-grid.mosaic-4,
+      .room-grid.cols-4,
+      .room-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+      .room-grid.mosaic-4 { grid-template-rows: none; }
+      .room-grid.featured .img-wrap:first-child { grid-row: span 1; height: 220px; }
+      .room-grid.featured .img-wrap,
+      .room-grid.triptych .img-wrap,
+      .room-grid.mosaic-4 .img-wrap,
+      .room-grid.cols-4 .img-wrap,
+      .room-grid.cols-3 .img-wrap { height: 200px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .nearby-inner { grid-template-columns: 1fr; gap: 40px; }
+      .stay-inner { grid-template-columns: 1fr; gap: 40px; }
+      #location { grid-template-columns: 1fr; gap: 40px; padding: 72px 24px; }
+      .location-map { height: 280px; }
+      footer { padding: 20px 24px; }
+      .hero-content { left: 24px; right: 24px; bottom: 64px; }
+      .hero-scroll { right: 24px; }
+      .to-top { right: 18px; bottom: 18px; }
+    }
+    @media (max-width: 540px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .nearby-grid { grid-template-columns: 1fr; }
+      .stay-list { grid-template-columns: 1fr; }
+      .shoreline-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 320px 220px 220px 220px;
+      }
+      .room-grid.cols-2 .img-wrap { height: 240px; }
+      .lang-btn { padding: 2px 3px; font-size: 10px; }
+      .nav-controls { gap: 10px; }
+      .contact-people { grid-template-columns: 1fr; gap: 34px; }
+    }
+  </style>
+</head>
+<body class="lang-en">
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">HÁT</a>
+
+    <div class="nav-links">
+      <a href="#about"><span class="en">About</span><span class="hu">Rólunk</span><span class="ro">Despre</span><span class="de">Über uns</span></a>
+      <a href="#gallery"><span class="en">Gallery</span><span class="hu">Galéria</span><span class="ro">Galerie</span><span class="de">Galerie</span></a>
+      <a href="#features"><span class="en">Amenities</span><span class="hu">Felszereltség</span><span class="ro">Dotări</span><span class="de">Ausstattung</span></a>
+      <a href="#location"><span class="en">Location</span><span class="hu">Elhelyezkedés</span><span class="ro">Locație</span><span class="de">Lage</span></a>
+      <a href="#nearby"><span class="en">Nearby</span><span class="hu">A közelben</span><span class="ro">Aproape</span><span class="de">Nähe</span></a>
+      <a href="#contact" class="nav-cta"><span class="en">Contact</span><span class="hu">Kapcsolat</span><span class="ro">Contact</span><span class="de">Kontakt</span></a>
+    </div>
+
+    <div class="nav-controls">
+      <button class="menu-btn" id="menu-btn" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false"><span></span></button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="btn-hu" onclick="setLang('hu')">HU</button>
+        <button class="lang-btn" id="btn-ro" onclick="setLang('ro')">RO</button>
+        <button class="lang-btn" id="btn-de" onclick="setLang('de')">DE</button>
+      </div>
+      <div class="nav-sep"></div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <img src="images/terrace/terrace-1.png" alt="HÁT Balaton terrace at golden hour" class="hero-img" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">
+        <span class="en">Balatonszemes · Hungary</span>
+        <span class="hu">Balatonszemes · Magyarország</span>
+        <span class="ro">Balatonszemes · Ungaria</span>
+        <span class="de">Balatonszemes · Ungarn</span>
+      </p>
+      <h1 class="hero-title">HÁT</h1>
+      <p class="hero-sub">
+        <span class="en">A quiet apartment by the lake, composed for slow mornings, warm evenings, and the small rituals of summer.</span>
+        <span class="hu">Csendes apartman a tó mellett, lassú reggelekhez, meleg estékhez és a nyár apró rítusaihoz.</span>
+        <span class="ro">Un apartament liniștit lângă lac, pentru dimineți lente, seri calde și micile ritualuri ale verii.</span>
+        <span class="de">Ein ruhiges Apartment am See, für langsame Morgen, warme Abende und die kleinen Rituale des Sommers.</span>
+      </p>
+      <div class="hero-actions">
+        <a href="#gallery" class="hero-link"><span class="en">View the space</span><span class="hu">Nézd meg a tereket</span><span class="ro">Vezi spațiul</span><span class="de">Räume ansehen</span></a>
+        <a href="#shoreline" class="hero-link"><span class="en">Find it on the shore</span><span class="hu">Hely a parton</span><span class="ro">Locul pe mal</span><span class="de">Lage am Ufer</span></a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span class="en">Scroll</span>
+      <span class="hu">Görgess</span>
+      <span class="ro">Jos</span>
+      <span class="de">Weiter</span>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section id="intro">
+    <div class="intro-inner fade-in">
+      <p class="intro-kicker">
+        <span class="en">Apartment portrait</span>
+        <span class="hu">Apartman portré</span>
+        <span class="ro">Portret de apartament</span>
+        <span class="de">Apartment-Porträt</span>
+      </p>
+      <div>
+        <p class="intro-statement">
+          <span class="en">A compact, light-filled Balaton home where the terrace becomes the second living room.</span>
+          <span class="hu">Kompakt, fénnyel teli balatoni otthon, ahol a terasz a második nappali.</span>
+          <span class="ro">O locuință compactă și luminoasă la Balaton, unde terasa devine al doilea living.</span>
+          <span class="de">Ein kompaktes, lichtes Zuhause am Balaton, in dem die Terrasse zum zweiten Wohnzimmer wird.</span>
+        </p>
+        <p class="intro-note">
+          <span class="en">HÁT keeps the essentials close: lake, shade, quiet interiors, and a village rhythm just outside the door.</span>
+          <span class="hu">A HÁT közel tartja a lényeget: tó, árnyék, csendes belső terek, és a falu ritmusa az ajtón túl.</span>
+          <span class="ro">HÁT păstrează aproape esențialul: lacul, umbra, interioarele liniștite și ritmul satului chiar dincolo de ușă.</span>
+          <span class="de">HÁT hält das Wesentliche nah: See, Schatten, ruhige Innenräume und den Rhythmus des Dorfes direkt vor der Tür.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-text fade-in">
+      <p class="section-label">
+        <span class="en">The apartment</span>
+        <span class="hu">Az apartman</span>
+        <span class="ro">Apartamentul</span>
+        <span class="de">Die Wohnung</span>
+      </p>
+      <h2>
+        <span class="en">Light, space,<br/>and the lake</span>
+        <span class="hu">Fény, tér<br/>és a Balaton</span>
+        <span class="ro">Lumină, spațiu<br/>și lacul</span>
+        <span class="de">Licht, Raum<br/>und der See</span>
+      </h2>
+      <div class="section-rule"></div>
+      <p class="en">
+        HÁT is a true <em>lakeside apartment</em> — the Balatonszemes szabadstrand, one of the most beautiful free beaches on the lake, is literally steps from the back of the complex. Wake up, walk out, and you're on the water.
+      </p>
+      <p class="hu">
+        A HÁT igazi <em>parti szállás</em> — Balatonszemes szabadstrandja, a Balaton egyik legszebb és leghangulatosabb szabad strandja, szó szerint a komplexum mögött kezdődik. Reggel felkelsz, kisétálsz, és már a víznél vagy.
+      </p>
+      <p class="ro">
+        HÁT este un adevărat <em>apartament la mal de lac</em> — plaja liberă din Balatonszemes, una dintre cele mai frumoase de pe Balaton, se află literalmente în spatele complexului. Te trezești, ieși, și ești deja la apă.
+      </p>
+      <p class="de">
+        HÁT ist eine echte <em>Seeunterkunft</em> — der Balatonszemeser Szabadstrand, einer der schönsten freien Strände am Balaton, beginnt buchstäblich hinter dem Komplex. Aufwachen, hinausgehen, Wasser.
+      </p>
+      <p class="en" style="margin-top:16px">
+        A 31&nbsp;m² apartment with a 12&nbsp;m² private terrace, thoughtfully furnished for four, in a quiet modern complex. Bright interiors, warm light, and the Balaton always close.
+      </p>
+      <p class="hu" style="margin-top:16px">
+        31&nbsp;m² apartman, 12&nbsp;m² saját terasszal, gondosan berendezve négy főnek, egy csendes modern komplexumban. Világos terek, meleg fény, és a Balaton mindig karnyújtásnyira.
+      </p>
+      <p class="ro" style="margin-top:16px">
+        Un apartament de 31&nbsp;m² cu terasă privată de 12&nbsp;m², mobilat cu grijă pentru patru persoane, într-un complex modern și liniștit. Spații luminoase, lumină caldă, și Balatonul mereu aproape.
+      </p>
+      <p class="de" style="margin-top:16px">
+        31&nbsp;m² Wohnung mit 12&nbsp;m² Terrasse, liebevoll für vier eingerichtet, in einem ruhigen modernen Komplex. Helle Räume, warmes Licht, und der Balaton immer in Reichweite.
+      </p>
+    </div>
+
+    <div class="about-stats fade-in">
+      <div class="stat">
+        <div class="stat-number">31<span class="stat-unit"> m²</span></div>
+        <div class="stat-label">
+          <span class="en">Living space</span><span class="hu">Alapterület</span>
+          <span class="ro">Suprafață</span><span class="de">Wohnfläche</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">12<span class="stat-unit"> m²</span></div>
+        <div class="stat-label">
+          <span class="en">Private terrace</span><span class="hu">Saját terasz</span>
+          <span class="ro">Terasă privată</span><span class="de">Terrasse</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4</div>
+        <div class="stat-label">
+          <span class="en">Guests</span><span class="hu">Fő</span>
+          <span class="ro">Persoane</span><span class="de">Gäste</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">
+          <span class="en">2<span class="stat-unit" style="font-size:20px">nd</span></span>
+          <span class="hu">2.</span>
+          <span class="ro">2</span>
+          <span class="de">2.</span>
+        </div>
+        <div class="stat-label">
+          <span class="en">Floor</span><span class="hu">Emelet</span>
+          <span class="ro">Etaj</span><span class="de">Etage</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS STRIP -->
+  <div id="highlights">
+    <div class="hl-item fade-in">
+      <div class="hl-icon">01</div>
+      <div class="hl-text">
+        <div class="hl-title"><span class="en">Excellent water quality</span><span class="hu">Kiváló vízminőség</span><span class="ro">Calitate excelentă a apei</span><span class="de">Ausgezeichnete Wasserqualität</span></div>
+        <div class="hl-sub"><span class="en">EU-certified · sandy lake bed · depth from 30 cm</span><span class="hu">EU-minősítés · homokos meder · 30 cm-es mélységtől</span><span class="ro">Certificat EU · fund nisipos · adâncime de la 30 cm</span><span class="de">EU-zertifiziert · Sandgrund · Tiefe ab 30 cm</span></div>
+      </div>
+    </div>
+    <div class="hl-sep"></div>
+    <div class="hl-item fade-in">
+      <div class="hl-icon">02</div>
+      <div class="hl-text">
+        <div class="hl-title"><span class="en">510 m of free beach</span><span class="hu">510 m-es szabadstrand</span><span class="ro">510 m de plajă liberă</span><span class="de">510 m Freistrand</span></div>
+        <div class="hl-sub"><span class="en">43,000 m² of grassy parkland · right behind the complex</span><span class="hu">43 000 m² füves park · közvetlenül a komplexum mögött</span><span class="ro">43.000 m² parc înierbat · chiar în spatele complexului</span><span class="de">43.000 m² Grünfläche · direkt hinter dem Komplex</span></div>
+      </div>
+    </div>
+    <div class="hl-sep"></div>
+    <div class="hl-item fade-in">
+      <div class="hl-icon">03</div>
+      <div class="hl-text">
+        <div class="hl-title"><span class="en">Balatonboglár wine country</span><span class="hu">Balatonboglári borvidék</span><span class="ro">Regiunea viticolă Balatonboglár</span><span class="de">Weinregion Balatonboglár</span></div>
+        <div class="hl-sub"><span class="en">Local estates and cellars minutes away</span><span class="hu">Helyi borászatok percekre</span><span class="ro">Crame locale la câteva minute</span><span class="de">Lokale Weingüter in Minuten erreichbar</span></div>
+      </div>
+    </div>
+    <div class="hl-sep"></div>
+    <div class="hl-item fade-in">
+      <div class="hl-icon">04</div>
+      <div class="hl-text">
+        <div class="hl-title"><span class="en">137 km from Budapest</span><span class="hu">137 km Budapesttől</span><span class="ro">137 km de la Budapesta</span><span class="de">137 km von Budapest</span></div>
+        <div class="hl-sub"><span class="en">1h 14 min on the M7 · direct trains available</span><span class="hu">1 ó 14 perc az M7-esen · közvetlen vonat is</span><span class="ro">1h 14 min pe M7 · trenuri directe disponibile</span><span class="de">1h 14 min auf der M7 · Direktzüge verfügbar</span></div>
+      </div>
+    </div>
+    <div class="hl-sep"></div>
+    <div class="hl-item fade-in">
+      <div class="hl-icon">05</div>
+      <div class="hl-text">
+        <div class="hl-title"><span class="en">Resort since the 1880s</span><span class="hu">Üdülőhely az 1880-as évektől</span><span class="ro">Stațiune de vacanță din anii 1880</span><span class="de">Ferienort seit den 1880ern</span></div>
+        <div class="hl-sub"><span class="en">Marina since 1913 · Kistücsök, Hungary's most celebrated countryside restaurant</span><span class="hu">Marina 1913 óta · Kistücsök, az ország leghíresebb vidéki étterme</span><span class="ro">Marină din 1913 · Kistücsök, cel mai renumit restaurant rural din Ungaria</span><span class="de">Marina seit 1913 · Kistücsök, Ungarns bekanntestes Landrestaurant</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHORELINE -->
+  <section id="shoreline">
+    <div class="shoreline-inner">
+      <div class="shoreline-text fade-in">
+        <p class="section-label">
+          <span class="en">The shore</span><span class="hu">A part</span>
+          <span class="ro">Malul</span><span class="de">Das Ufer</span>
+        </p>
+        <h2>
+          <span class="en">Beach, marina,<br/>and open water</span>
+          <span class="hu">Strand, marina<br/>és nyílt víz</span>
+          <span class="ro">Plajă, marină<br/>și apă deschisă</span>
+          <span class="de">Strand, Marina<br/>und offenes Wasser</span>
+        </h2>
+        <div class="section-rule"></div>
+        <p class="en">The apartment sits beside one of Balatonszemes' best everyday luxuries: the free beach, with grass, old trees, shallow water, and wide views across the lake.</p>
+        <p class="hu">Az apartman Balatonszemes egyik legjobb mindennapi luxusa mellett van: a szabadstrandnál, füves parttal, öreg fákkal, sekély vízzel és tág balatoni kilátással.</p>
+        <p class="ro">Apartamentul este lângă unul dintre cele mai frumoase lucruri simple din Balatonszemes: plaja liberă, cu iarbă, copaci bătrâni, apă mică și priveliști largi peste lac.</p>
+        <p class="de">Die Wohnung liegt neben einem der schönsten Alltagsluxusorte von Balatonszemes: dem Freistrand mit Wiese, alten Bäumen, flachem Wasser und weitem Blick über den See.</p>
+        <p class="en">The marina and waterfront paths add another rhythm: morning walks, boats in the reeds, cycling days, and golden-hour returns from the water.</p>
+        <p class="hu">A marina és a vízparti utak másik ritmust adnak: reggeli séták, hajók a nádasnál, bringás napok és aranyórás visszaérkezések a vízről.</p>
+        <p class="ro">Marina și aleile de pe mal adaugă un alt ritm: plimbări de dimineață, bărci lângă stuf, zile cu bicicleta și întoarceri pe lumină caldă de pe apă.</p>
+        <p class="de">Marina und Uferwege geben einen zweiten Rhythmus: Morgenspaziergänge, Boote im Schilf, Radtage und Rückkehr vom Wasser im goldenen Licht.</p>
+      </div>
+      <div class="shoreline-grid fade-in">
+        <div class="img-wrap"><img src="images/strand/strand-2.png" alt="Balatonszemes free beach with old trees" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/strand/strand-3.png" alt="Balatonszemes marina" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/strand/strand-1.png" alt="Sandy beach and lake shore" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/strand/strand-4.png" alt="Lake Balaton from the water" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="gallery-header fade-in">
+      <p class="section-label">
+        <span class="en">Gallery</span><span class="hu">Galéria</span>
+        <span class="ro">Galerie</span><span class="de">Galerie</span>
+      </p>
+      <h2>
+        <span class="en">Every corner<br/>considered</span>
+        <span class="hu">Minden részlet<br/>átgondolva</span>
+        <span class="ro">Fiecare colț,<br/>gândit</span>
+        <span class="de">Jedes Detail<br/>durchdacht</span>
+      </h2>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Exterior</span><span class="hu">Külső</span>
+        <span class="ro">Exterior</span><span class="de">Außenbereich</span>
+      </p>
+      <div class="room-grid cols-2">
+        <div class="img-wrap"><img src="images/outside/outside-1.png" alt="Exterior" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/outside/outside-4.png" alt="Complex" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Terrace</span><span class="hu">Terasz</span>
+        <span class="ro">Terasă</span><span class="de">Terrasse</span>
+      </p>
+      <div class="room-grid triptych">
+        <div class="img-wrap"><img src="images/terrace/terrace-1.png" alt="Terrace golden hour" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/terrace/terrace-2.png" alt="Terrace view" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/terrace/terrace-4.png" alt="Terrace detail" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Living Room & Dining</span><span class="hu">Nappali & Étkező</span>
+        <span class="ro">Living & Sufragerie</span><span class="de">Wohn- & Esszimmer</span>
+      </p>
+      <div class="room-grid mosaic-4">
+        <div class="img-wrap"><img src="images/living/living-1.png" alt="Living room" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/living/living-2.png" alt="Dining" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/living/living-4.png" alt="Living detail" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/living/living-5.png" alt="Living view" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Bedroom</span><span class="hu">Hálószoba</span>
+        <span class="ro">Dormitor</span><span class="de">Schlafzimmer</span>
+      </p>
+      <div class="room-grid cols-2">
+        <div class="img-wrap"><img src="images/bedroom/bedroom-1.png" alt="Bedroom" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/bedroom/bedroom-2.png" alt="Bedroom overview" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/bedroom/bedroom-3.png" alt="Bedroom detail" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/bedroom/bedroom-4.png" alt="Bedroom" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Kitchen</span><span class="hu">Konyha</span>
+        <span class="ro">Bucătărie</span><span class="de">Küche</span>
+      </p>
+      <div class="room-grid cols-2">
+        <div class="img-wrap"><img src="images/kitchen/kitchen-1.png" alt="Kitchen" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/kitchen/kitchen-2.png" alt="Kitchen" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="room-section fade-in">
+      <p class="room-title">
+        <span class="en">Bathroom</span><span class="hu">Fürdőszoba</span>
+        <span class="ro">Baie</span><span class="de">Badezimmer</span>
+      </p>
+      <div class="room-grid cols-3">
+        <div class="img-wrap"><img src="images/bathroom/bathroom-1.png" alt="Bathroom" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/bathroom/bathroom-2.png" alt="Bathroom detail" loading="lazy" /></div>
+        <div class="img-wrap"><img src="images/bathroom/bathroom-3.png" alt="Bathroom" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="features-inner">
+      <p class="section-label fade-in">
+        <span class="en">Amenities</span><span class="hu">Felszereltség</span>
+        <span class="ro">Dotări</span><span class="de">Ausstattung</span>
+      </p>
+      <h2 class="fade-in">
+        <span class="en">Everything<br/>you need</span>
+        <span class="hu">Minden,<br/>amire szükség van</span>
+        <span class="ro">Tot ce<br/>ai nevoie</span>
+        <span class="de">Alles, was<br/>Sie brauchen</span>
+      </h2>
+      <div class="features-grid fade-in">
+
+        <div class="feature">
+          <div class="feature-icon">01</div>
+          <div class="feature-name">
+            <span class="en">Climate Control</span><span class="hu">Fancoil fűtés/hűtés</span>
+            <span class="ro">Climatizare</span><span class="de">Klimaanlage</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">Fancoil heating and cooling for year-round comfort</span>
+            <span class="hu">Fancoil rendszer egész éves komforthoz</span>
+            <span class="ro">Sistem fancoil pentru confort tot timpul anului</span>
+            <span class="de">Fancoil-System für ganzjährigen Komfort</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">02</div>
+          <div class="feature-name">
+            <span class="en">Equipped Kitchen</span><span class="hu">Felszerelt konyha</span>
+            <span class="ro">Bucătărie echipată</span><span class="de">Ausgestattete Küche</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">Electric hob, dual air fryer, electric kettle, blender, and toaster</span>
+            <span class="hu">Elektromos főzőlap, dupla air fryer, vízforraló, blender és kenyérpirító</span>
+            <span class="ro">Plită electrică, air fryer dublu, fierbător electric, blender și toaster</span>
+            <span class="de">Elektrokochfeld, Dual-Airfryer, Wasserkocher, Blender und Toaster</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">03</div>
+          <div class="feature-name">
+            <span class="en">Proper Coffee</span><span class="hu">Igazi kávé</span>
+            <span class="ro">Cafea bună</span><span class="de">Guter Kaffee</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">De'Longhi Dedica espresso machine for slow mornings</span>
+            <span class="hu">De'Longhi Dedica eszpresszógép lassú reggelekhez</span>
+            <span class="ro">Espressor De'Longhi Dedica pentru dimineți lente</span>
+            <span class="de">De'Longhi Dedica Espressomaschine für langsame Morgen</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">04</div>
+          <div class="feature-name">
+            <span class="en">Private Terrace</span><span class="hu">Saját terasz</span>
+            <span class="ro">Terasă privată</span><span class="de">Private Terrasse</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">12 m² outdoor space with table and chairs</span>
+            <span class="hu">12 m² külső tér asztallal és székekkel</span>
+            <span class="ro">Spațiu exterior de 12 m² cu masă și scaune</span>
+            <span class="de">12 m² Außenbereich mit Tisch und Stühlen</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">05</div>
+          <div class="feature-name">
+            <span class="en">Parking</span><span class="hu">Parkoló</span>
+            <span class="ro">Parcare</span><span class="de">Parkplatz</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">Private parking space included with the apartment</span>
+            <span class="hu">Saját parkolóhely tartozik az apartmanhoz</span>
+            <span class="ro">Loc de parcare privat inclus cu apartamentul</span>
+            <span class="de">Privater Stellplatz gehört zur Wohnung</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">06</div>
+          <div class="feature-name">
+            <span class="en">Laundry</span><span class="hu">Mosás</span>
+            <span class="ro">Spălare</span><span class="de">Wäsche</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">In-apartment washing machine for longer stays</span>
+            <span class="hu">Mosógép az apartmanban hosszabb tartózkodáshoz</span>
+            <span class="ro">Mașină de spălat în apartament pentru șederi mai lungi</span>
+            <span class="de">Waschmaschine in der Wohnung für längere Aufenthalte</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">07</div>
+          <div class="feature-name">
+            <span class="en">Two TVs & Internet</span><span class="hu">Két TV és internet</span>
+            <span class="ro">Două TV-uri și internet</span><span class="de">Zwei TVs & Internet</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">Reliable internet and screens in both living and sleeping areas</span>
+            <span class="hu">Megbízható internet, TV a nappali és az alvó részen is</span>
+            <span class="ro">Internet stabil și ecrane în zona de zi și de dormit</span>
+            <span class="de">Zuverlässiges Internet und Bildschirme im Wohn- und Schlafbereich</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">08</div>
+          <div class="feature-name">
+            <span class="en">Sleeps 4</span><span class="hu">4 fő részére</span>
+            <span class="ro">4 persoane</span><span class="de">4 Personen</span>
+          </div>
+          <div class="feature-desc">
+            <span class="en">A compact layout arranged comfortably for up to four guests</span>
+            <span class="hu">Kompakt elrendezés, kényelmesen berendezve legfeljebb négy főnek</span>
+            <span class="ro">Un plan compact, amenajat confortabil pentru până la patru persoane</span>
+            <span class="de">Kompakter Grundriss, bequem für bis zu vier Gäste eingerichtet</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STAY NOTES -->
+  <section id="stay-notes">
+    <div class="stay-inner">
+      <div class="fade-in">
+        <p class="section-label">
+          <span class="en">Small details</span><span class="hu">Apró részletek</span>
+          <span class="ro">Detalii mici</span><span class="de">Kleine Details</span>
+        </p>
+        <h2>
+          <span class="en">Made for<br/>unhurried days</span>
+          <span class="hu">Lassú<br/>napokra hangolva</span>
+          <span class="ro">Pentru zile<br/>fără grabă</span>
+          <span class="de">Für Tage<br/>ohne Eile</span>
+        </h2>
+        <div class="section-rule"></div>
+      </div>
+      <div class="stay-list fade-in">
+        <div class="stay-item">
+          <strong><span class="en">Morning terrace</span><span class="hu">Reggeli terasz</span><span class="ro">Terasă de dimineață</span><span class="de">Morgenterrasse</span></strong>
+          <span class="en">A shaded outdoor room for coffee, reading, and late dinners.</span>
+          <span class="hu">Árnyékos külső szoba kávéhoz, olvasáshoz és hosszú vacsorákhoz.</span>
+          <span class="ro">O cameră exterioară umbrită pentru cafea, citit și cine târzii.</span>
+          <span class="de">Ein schattiger Außenraum für Kaffee, Lesen und lange Abendessen.</span>
+        </div>
+        <div class="stay-item">
+          <strong><span class="en">Beach rhythm</span><span class="hu">Strandritmus</span><span class="ro">Ritm de plajă</span><span class="de">Strandrhythmus</span></strong>
+          <span class="en">The free beach is close enough for several swims in a single day.</span>
+          <span class="hu">A szabadstrand elég közel van ahhoz, hogy naponta többször is visszatérj.</span>
+          <span class="ro">Plaja liberă este suficient de aproape pentru mai multe băi într-o zi.</span>
+          <span class="de">Der Freistrand ist nah genug für mehrere Badegänge am Tag.</span>
+        </div>
+        <div class="stay-item">
+          <strong><span class="en">Quiet footprint</span><span class="hu">Csendes méret</span><span class="ro">Amprentă liniștită</span><span class="de">Ruhige Größe</span></strong>
+          <span class="en">31 m² planned simply, with storage, climate control, and room for four.</span>
+          <span class="hu">31 m² egyszerűen megtervezve, tárolással, fancoillal és négy főnek elegendő hellyel.</span>
+          <span class="ro">31 m² gândiți simplu, cu depozitare, climatizare și spațiu pentru patru.</span>
+          <span class="de">31 m² klar geplant, mit Stauraum, Klimatisierung und Platz für vier.</span>
+        </div>
+        <div class="stay-item">
+          <strong><span class="en">Village access</span><span class="hu">Faluközeli hely</span><span class="ro">Aproape de sat</span><span class="de">Nah am Dorf</span></strong>
+          <span class="en">Good restaurants, trains, the marina, and old trees sit within an easy walk.</span>
+          <span class="hu">Jó éttermek, vonat, marina és öreg fák mind kényelmes sétára vannak.</span>
+          <span class="ro">Restaurante bune, trenul, marina și copacii bătrâni sunt la o plimbare ușoară.</span>
+          <span class="de">Gute Restaurants, Bahn, Marina und alte Bäume liegen in bequemer Gehweite.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section id="location">
+    <div class="location-text fade-in">
+      <p class="section-label">
+        <span class="en">Location</span><span class="hu">Elhelyezkedés</span>
+        <span class="ro">Locație</span><span class="de">Lage</span>
+      </p>
+      <h2>
+        <span class="en">Balatonszemes,<br/>Lake Balaton</span>
+        <span class="hu">Balatonszemes,<br/>Balaton</span>
+        <span class="ro">Balatonszemes,<br/>Lacul Balaton</span>
+        <span class="de">Balatonszemes,<br/>Balaton</span>
+      </h2>
+      <div class="section-rule"></div>
+
+      <p class="en">HÁT is part of <strong>Szemespart II</strong> — a modern residential complex right in the heart of Balatonszemes, at Ady Endre utca 8. The complex sits moments from the lake shore, combining contemporary architecture with the quiet village atmosphere that makes this stretch of the Balaton so special.</p>
+      <p class="hu">A HÁT a <strong>Szemespart II</strong> komplexum része — egy modern, igényesen tervezett épületegyüttes Balatonszemes szívében, az Ady Endre utca 8. szám alatt. A komplexum közvetlenül a tóparton helyezkedik el, ötvözve a kortárs építészetet a balatoni kisváros csendes hangulatával.</p>
+      <p class="ro">HÁT face parte din complexul <strong>Szemespart II</strong> — un complex rezidențial modern în inima satului Balatonszemes, la Ady Endre utca 8. Complexul se află la câțiva pași de malul lacului, combinând arhitectura contemporană cu atmosfera liniștită a satului.</p>
+      <p class="de">HÁT ist Teil des <strong>Szemespart II</strong>-Komplexes — eine moderne Wohnanlage im Herzen von Balatonszemes, Ady Endre utca 8. Der Komplex liegt direkt am Seeufer und verbindet zeitgenössische Architektur mit der ruhigen Dorfatmosphäre.</p>
+
+      <p class="en" style="margin-top:16px">The village beach stretches for 510 metres along the shore, with a generous 43,000 m² of grassy parkland shaded by old trees — one of the most beautiful and traditional bathing spots on the entire Balaton. Grass, water, and light filtering through the canopy.</p>
+      <p class="hu" style="margin-top:16px">A falusi strand 510 méter hosszan nyúlik el a tóparton, 43 000 m² füves, fákkal árnyékolt parkkal — a Balaton egyik legszebb és leghagyományosabb fürdőhelye. Fű, víz, és a lombkoronán átsütő fény.</p>
+      <p class="ro" style="margin-top:16px">Plaja satului se întinde pe 510 metri de-a lungul malului, cu 43.000 m² de parc înierbat umbrit de copaci bătrâni — unul dintre cele mai frumoase și tradiționale locuri de scăldat de pe întreg Balatonul.</p>
+      <p class="de" style="margin-top:16px">Der Dorfstrand erstreckt sich über 510 Meter entlang des Ufers, mit 43.000 m² Grünfläche unter alten Bäumen — einer der schönsten und traditionsreichsten Badeplätze am gesamten Balaton.</p>
+
+      <p class="en" style="margin-top:16px">Just 130 km from Budapest via the M7 motorway (~1h 15min), with direct train connections. In the village: Kistücsök and other good restaurants, a marina and yacht harbour, the Latinovits Zoltán Cultural Centre, and the annual Bujtor Film Festival.</p>
+      <p class="hu" style="margin-top:16px">Mindössze 130 km-re Budapesttől az M7-esen (~1 ó 15 perc), közvetlen vonatkapcsolattal. A faluban: Kistücsök és más jó éttermek, marina és jachtkikötő, Latinovits Zoltán Művelődési Ház, Bujtor Filmfesztivál.</p>
+      <p class="ro" style="margin-top:16px">La doar 130 km de Budapesta pe autostrada M7 (~1h 15min), cu conexiuni directe de tren. În sat: Kistücsök și alte restaurante bune, o marină și port de iahturi, Centrul Cultural Latinovits Zoltán și Festivalul de Film Bujtor.</p>
+      <p class="de" style="margin-top:16px">Nur 130 km von Budapest über die M7 (~1h 15min), gut mit Direktzügen erreichbar. Im Dorf: Kistücsök und weitere gute Restaurants, Marina und Yachthafen, das Latinovits Zoltán Kulturzentrum und das Bujtor Filmfestival.</p>
+    </div>
+
+    <div class="location-map fade-in">
+      <iframe
+        src="https://maps.google.com/maps?q=Balatonszemes+Ady+Endre+utca+8+8636+Hungary&t=&z=15&ie=UTF8&iwloc=&output=embed"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Szemespart II, Balatonszemes">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- NEARBY -->
+  <section id="nearby">
+    <div class="nearby-inner">
+      <div class="fade-in">
+        <p class="section-label">
+          <span class="en">Nearby</span><span class="hu">A közelben</span>
+          <span class="ro">În apropiere</span><span class="de">In der Nähe</span>
+        </p>
+        <h2>
+          <span class="en">A village rhythm,<br/>a few steps away</span>
+          <span class="hu">Falusi ritmus,<br/>néhány lépésre</span>
+          <span class="ro">Ritmul satului,<br/>la câțiva pași</span>
+          <span class="de">Dorfrhythmus,<br/>nur wenige Schritte entfernt</span>
+        </h2>
+        <div class="section-rule"></div>
+      </div>
+      <div class="nearby-grid fade-in">
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Beach</span><span class="hu">Strand</span><span class="ro">Plajă</span><span class="de">Strand</span></span>
+          <strong><span class="en">Balatonszemes free beach</span><span class="hu">Balatonszemesi szabadstrand</span><span class="ro">Plaja liberă Balatonszemes</span><span class="de">Balatonszemes Freistrand</span></strong>
+          <span><span class="en">Grass, shade, sandy lake bed, and shallow water close behind the complex.</span><span class="hu">Fű, árnyék, homokos meder és sekély víz közvetlenül a komplexum mögött.</span><span class="ro">Iarbă, umbră, fund nisipos și apă mică aproape în spatele complexului.</span><span class="de">Wiese, Schatten, Sandgrund und flaches Wasser direkt hinter dem Komplex.</span></span>
+        </div>
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Food</span><span class="hu">Ételek</span><span class="ro">Mâncare</span><span class="de">Essen</span></span>
+          <strong><span class="en">Kistücsök and local restaurants</span><span class="hu">Kistücsök és helyi éttermek</span><span class="ro">Kistücsök și restaurante locale</span><span class="de">Kistücsök und lokale Restaurants</span></strong>
+          <span><span class="en">A strong food scene nearby, from celebrated dining to simple summer meals.</span><span class="hu">Erős gasztronómiai környezet, ismert étteremtől egyszerű nyári vacsorákig.</span><span class="ro">O zonă bună pentru mâncare, de la restaurante cunoscute la mese simple de vară.</span><span class="de">Eine gute Essensszene in der Nähe, von bekannter Küche bis zu einfachen Sommeressen.</span></span>
+        </div>
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Groceries</span><span class="hu">Bevásárlás</span><span class="ro">Cumpărături</span><span class="de">Einkaufen</span></span>
+          <strong><span class="en">Small shops for good provisions</span><span class="hu">Kis boltok jó alapanyagokhoz</span><span class="ro">Magazine mici pentru provizii bune</span><span class="de">Kleine Läden für gute Vorräte</span></strong>
+          <span><span class="en">Easy everyday groceries for breakfast, terrace dinners, and lake-day snacks.</span><span class="hu">Könnyű napi bevásárlás reggelihez, teraszos vacsorához és strandnapi falatokhoz.</span><span class="ro">Cumpărături simple pentru mic dejun, cine pe terasă și gustări pentru plajă.</span><span class="de">Einfache Einkäufe für Frühstück, Terrassenabende und Snacks für den Strandtag.</span></span>
+        </div>
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Arrive</span><span class="hu">Érkezés</span><span class="ro">Sosire</span><span class="de">Anreise</span></span>
+          <strong><span class="en">Train and M7 access</span><span class="hu">Vonat és M7</span><span class="ro">Tren și acces M7</span><span class="de">Bahn und M7</span></strong>
+          <span><span class="en">Direct train connections and an easy drive from Budapest keep arrival simple.</span><span class="hu">Közvetlen vonatok és egyszerű autós út Budapest felől.</span><span class="ro">Conexiuni directe cu trenul și drum ușor cu mașina din Budapesta.</span><span class="de">Direkte Bahnverbindungen und eine einfache Fahrt von Budapest.</span></span>
+        </div>
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Cycling</span><span class="hu">Kerékpár</span><span class="ro">Bicicletă</span><span class="de">Radfahren</span></span>
+          <strong><span class="en">Balaton Bike Ring</span><span class="hu">Balatoni bringakör</span><span class="ro">Circuitul de biciclete Balaton</span><span class="de">Balaton-Radrunde</span></strong>
+          <span><span class="en">The roughly 200 km lake cycle route passes through Balatonszemes.</span><span class="hu">A nagyjából 200 km-es balatoni bringakör Balatonszemesen is áthalad.</span><span class="ro">Traseul ciclist de aproximativ 200 km al lacului trece prin Balatonszemes.</span><span class="de">Die rund 200 km lange Balaton-Radrunde führt durch Balatonszemes.</span></span>
+        </div>
+        <div class="nearby-item">
+          <span class="nearby-meta"><span class="en">Waterfront</span><span class="hu">Vízpart</span><span class="ro">Malul apei</span><span class="de">Ufer</span></span>
+          <strong><span class="en">Marina and evening walks</span><span class="hu">Marina és esti séták</span><span class="ro">Marină și plimbări de seară</span><span class="de">Marina und Abendspaziergänge</span></strong>
+          <span><span class="en">The nearby harbour, old trees, and quiet streets make the lake feel close all day.</span><span class="hu">A közeli kikötő, az öreg fák és a csendes utcák egész nap közel hozzák a Balatont.</span><span class="ro">Portul din apropiere, copacii bătrâni și străzile liniștite țin lacul aproape toată ziua.</span><span class="de">Der nahe Hafen, alte Bäume und ruhige Straßen halten den See den ganzen Tag nah.</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">
+      <span class="en">Get in touch</span><span class="hu">Kapcsolat</span>
+      <span class="ro">Contact</span><span class="de">Kontakt</span>
+    </p>
+    <h2 class="fade-in">
+      <span class="en">Plan your stay</span>
+      <span class="hu">Tervezd meg a tartózkodásod</span>
+      <span class="ro">Planifică-ți sejurul</span>
+      <span class="de">Planen Sie Ihren Aufenthalt</span>
+    </h2>
+    <div class="section-rule"></div>
+    <div class="contact-people">
+      <div class="contact-person">
+        <p class="contact-name">Ági</p>
+        <a href="tel:+36307329418" class="contact-phone">+36 30 732 9418</a>
+        <a href="mailto:agnes.schwarzenberger@gmail.com" class="contact-email">agnes.schwarzenberger@gmail.com</a>
+        <div class="contact-links">
+          <a href="tel:+36307329418"><span class="en">Call</span><span class="hu">Hívás</span><span class="ro">Sună</span><span class="de">Anrufen</span></a>
+          <a href="sms:+36307329418"><span class="en">SMS</span><span class="hu">SMS</span><span class="ro">SMS</span><span class="de">SMS</span></a>
+          <a href="mailto:agnes.schwarzenberger@gmail.com"><span class="en">Email</span><span class="hu">Email</span><span class="ro">Email</span><span class="de">Email</span></a>
+        </div>
+      </div>
+      <div class="contact-person">
+        <p class="contact-name">Huba</p>
+        <a href="tel:+36308271670" class="contact-phone">+36 30 827 1670</a>
+        <a href="mailto:huba.schwarzenberger@gmail.com" class="contact-email">huba.schwarzenberger@gmail.com</a>
+        <div class="contact-links">
+          <a href="tel:+36308271670"><span class="en">Call</span><span class="hu">Hívás</span><span class="ro">Sună</span><span class="de">Anrufen</span></a>
+          <a href="sms:+36308271670"><span class="en">SMS</span><span class="hu">SMS</span><span class="ro">SMS</span><span class="de">SMS</span></a>
+          <a href="mailto:huba.schwarzenberger@gmail.com"><span class="en">Email</span><span class="hu">Email</span><span class="ro">Email</span><span class="de">Email</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="contact-links">
+      <a href="https://maps.google.com/?q=Balatonszemes+Ady+Endre+utca+8+8636+Hungary" target="_blank" rel="noopener"><span class="en">Open map</span><span class="hu">Térkép</span><span class="ro">Hartă</span><span class="de">Karte</span></a>
+    </div>
+    <p class="contact-address">Szemespart II · Ady Endre u. 8 · 8636 Balatonszemes</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">HÁT · Balatonszemes</div>
+    <div class="footer-copy">© 2026</div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button class="lb-close" onclick="closeLightbox()">×</button>
+    <button class="lb-prev" onclick="lbMove(-1)">&#8249;</button>
+    <img id="lb-img" src="" alt="" />
+    <button class="lb-next" onclick="lbMove(1)">&#8250;</button>
+  </div>
+
+  <button class="to-top" id="to-top" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <script>
+    // ── Language ──
+    function setLang(lang) {
+      document.body.classList.remove('lang-en','lang-hu','lang-ro','lang-de');
+      document.body.classList.add('lang-' + lang);
+      ['en','hu','ro','de'].forEach(l => {
+        document.getElementById('btn-' + l).classList.toggle('active', l === lang);
+      });
+      localStorage.setItem('hat-lang', lang);
+    }
+
+    // ── Mobile menu ──
+    function toggleMenu() {
+      const isOpen = navbar.classList.toggle('menu-open');
+      document.getElementById('menu-btn').setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    // ── Theme ──
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark');
+      document.getElementById('theme-btn').textContent = isDark ? '☀' : '☾';
+      localStorage.setItem('hat-theme', isDark ? 'dark' : 'light');
+    }
+
+    // ── Restore preferences ──
+    (function init() {
+      const lang = localStorage.getItem('hat-lang') || 'en';
+      const theme = localStorage.getItem('hat-theme') || 'light';
+      setLang(lang);
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('theme-btn').textContent = '☀';
+      }
+    })();
+
+    // ── Scrolled nav ──
+    const navbar = document.getElementById('navbar');
+    const toTop = document.getElementById('to-top');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      toTop.classList.toggle('visible', window.scrollY > 700);
+      if (navbar.classList.contains('menu-open')) {
+        navbar.classList.remove('menu-open');
+        document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
+      }
+    }, { passive: true });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navbar.classList.remove('menu-open');
+        document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ── Fade in on scroll ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ── Lightbox ──
+    let allImages = [], lbIndex = 0;
+    document.querySelectorAll('.img-wrap').forEach(wrap => {
+      wrap.addEventListener('click', () => {
+        allImages = Array.from(document.querySelectorAll('.img-wrap img'));
+        lbIndex = allImages.indexOf(wrap.querySelector('img'));
+        document.getElementById('lb-img').src = allImages[lbIndex].src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function lbMove(dir) {
+      lbIndex = (lbIndex + dir + allImages.length) % allImages.length;
+      document.getElementById('lb-img').src = allImages[lbIndex].src;
+    }
+    document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lbMove(-1);
+      if (e.key === 'ArrowRight') lbMove(1);
+    });
+  </script>
+</body>
+</html>
