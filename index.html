@@ -645,6 +645,136 @@
       line-height: 1.65;
     }
 
+    /* ── AVAILABILITY ── */
+    #availability {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .availability-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: block;
+    }
+    .availability-text {
+      max-width: 760px;
+      margin-bottom: 48px;
+    }
+    .availability-text p:not(.section-label) {
+      color: var(--text-mid);
+      max-width: 620px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .availability-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .month-card {
+      background: var(--bg-card);
+      padding: 28px 24px 24px;
+      min-height: 360px;
+      transition: background 0.35s;
+    }
+    .month-name {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+    .calendar-weekdays,
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .calendar-weekdays {
+      color: var(--text-mid);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .calendar-weekdays span {
+      text-align: center;
+    }
+    .day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      color: var(--text);
+      font-size: 11px;
+      line-height: 1;
+    }
+    .day.muted {
+      color: transparent;
+      pointer-events: none;
+    }
+    .day.booked {
+      background: var(--clay);
+      border-color: var(--clay);
+      color: #fff;
+    }
+    .day.reserved {
+      background: transparent;
+      border-color: var(--clay);
+      color: var(--clay);
+    }
+    .day.booked-start {
+      border-radius: 999px 0 0 999px;
+    }
+    .day.booked-end {
+      border-radius: 0 999px 999px 0;
+    }
+    .day.reserved-start {
+      border-radius: 999px 0 0 999px;
+    }
+    .day.reserved-end {
+      border-radius: 0 999px 999px 0;
+    }
+    .availability-legend {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 22px;
+      color: var(--text-mid);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .legend-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-mark::before {
+      content: "";
+      width: 18px;
+      height: 10px;
+      background: var(--clay);
+      display: inline-block;
+    }
+    .legend-mark.reserved::before {
+      background: transparent;
+      border: 1px solid var(--clay);
+    }
+    .legend-mark.free::before {
+      background: transparent;
+      border: 1px solid var(--border);
+    }
+    .availability-note {
+      margin-top: 16px;
+      color: var(--text-mid);
+      font-size: 12px;
+      line-height: 1.7;
+      max-width: 720px;
+    }
+
     /* ── STAY NOTES ── */
     #stay-notes {
       background: var(--bg);
@@ -980,6 +1110,7 @@
       .room-grid.cols-3 .img-wrap { height: 200px; }
       .features-grid { grid-template-columns: 1fr 1fr; }
       .nearby-inner { grid-template-columns: 1fr; gap: 40px; }
+      .availability-board { grid-template-columns: repeat(2, 1fr); }
       .stay-inner { grid-template-columns: 1fr; gap: 40px; }
       #location { grid-template-columns: 1fr; gap: 40px; padding: 72px 24px; }
       .location-map { height: 280px; }
@@ -988,9 +1119,14 @@
       .hero-scroll { right: 24px; }
       .to-top { right: 18px; bottom: 18px; }
     }
+    @media (max-width: 1180px) and (min-width: 961px) {
+      .availability-board { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 540px) {
       .features-grid { grid-template-columns: 1fr; }
       .nearby-grid { grid-template-columns: 1fr; }
+      .availability-board { grid-template-columns: 1fr; }
+      .month-card { min-height: auto; }
       .stay-list { grid-template-columns: 1fr; }
       .shoreline-grid {
         grid-template-columns: 1fr;
@@ -1003,7 +1139,7 @@
     }
   </style>
 </head>
-<body class="lang-en">
+<body class="lang-hu">
 
   <!-- NAV -->
   <nav id="navbar">
@@ -1015,16 +1151,17 @@
       <a href="#features"><span class="en">Amenities</span><span class="hu">Felszereltség</span><span class="ro">Dotări</span><span class="de">Ausstattung</span></a>
       <a href="#location"><span class="en">Location</span><span class="hu">Elhelyezkedés</span><span class="ro">Locație</span><span class="de">Lage</span></a>
       <a href="#nearby"><span class="en">Nearby</span><span class="hu">A közelben</span><span class="ro">Aproape</span><span class="de">Nähe</span></a>
+      <a href="#availability"><span class="en">Dates</span><span class="hu">Dátumok</span><span class="ro">Date</span><span class="de">Daten</span></a>
       <a href="#contact" class="nav-cta"><span class="en">Contact</span><span class="hu">Kapcsolat</span><span class="ro">Contact</span><span class="de">Kontakt</span></a>
     </div>
 
     <div class="nav-controls">
       <button class="menu-btn" id="menu-btn" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false"><span></span></button>
       <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" id="btn-hu" onclick="setLang('hu')">HU</button>
-        <button class="lang-btn" id="btn-ro" onclick="setLang('ro')">RO</button>
+        <button class="lang-btn active" id="btn-hu" onclick="setLang('hu')">HU</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
         <button class="lang-btn" id="btn-de" onclick="setLang('de')">DE</button>
+        <button class="lang-btn" id="btn-ro" onclick="setLang('ro')">RO</button>
       </div>
       <div class="nav-sep"></div>
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
@@ -1605,6 +1742,94 @@
     </div>
   </section>
 
+  <!-- AVAILABILITY -->
+  <section id="availability">
+    <div class="availability-inner">
+      <div class="availability-text fade-in">
+        <p class="section-label">
+          <span class="en">Availability</span><span class="hu">Elérhetőség</span>
+          <span class="ro">Disponibilitate</span><span class="de">Verfügbarkeit</span>
+        </p>
+        <h2>
+          <span class="en">See which dates<br/>are available</span>
+          <span class="hu">Nézd meg,<br/>mely napok szabadok</span>
+          <span class="ro">Vezi ce date<br/>sunt disponibile</span>
+          <span class="de">Sehen Sie,<br/>welche Daten frei sind</span>
+        </h2>
+        <div class="section-rule"></div>
+        <p class="en">Booked and on-hold periods are marked below for the Balaton season. For dates outside May-August, or for the most current availability, just contact us.</p>
+        <p class="hu">A balatoni szezon foglalt és függőben lévő időszakai lent láthatók. Májustól augusztusig kívüli dátumokért, vagy a legfrissebb elérhetőségért írj nekünk.</p>
+        <p class="ro">Perioadele ocupate și în așteptare pentru sezonul Balaton sunt marcate mai jos. Pentru date în afara lunilor mai-august sau pentru disponibilitatea actuală, contactează-ne.</p>
+        <p class="de">Gebuchte und angefragte Zeiträume der Balaton-Saison sind unten markiert. Für Termine außerhalb von Mai-August oder die aktuellste Verfügbarkeit schreiben Sie uns einfach.</p>
+      </div>
+
+      <div class="fade-in">
+        <div class="availability-board">
+          <div class="month-card">
+            <div class="month-name"><span class="en">May</span><span class="hu">Május</span><span class="ro">Mai</span><span class="de">Mai</span></div>
+            <div class="calendar-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="calendar-days">
+              <span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day reserved reserved-start">1</span><span class="day reserved">2</span><span class="day reserved reserved-end">3</span>
+              <span class="day">4</span><span class="day">5</span><span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day">10</span>
+              <span class="day">11</span><span class="day">12</span><span class="day">13</span><span class="day">14</span><span class="day">15</span><span class="day">16</span><span class="day">17</span>
+              <span class="day">18</span><span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day">24</span>
+              <span class="day">25</span><span class="day">26</span><span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span><span class="day">31</span>
+            </div>
+          </div>
+
+          <div class="month-card">
+            <div class="month-name"><span class="en">June</span><span class="hu">Június</span><span class="ro">Iunie</span><span class="de">Juni</span></div>
+            <div class="calendar-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="calendar-days">
+              <span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span><span class="day">5</span><span class="day">6</span><span class="day">7</span>
+              <span class="day">8</span><span class="day">9</span><span class="day">10</span><span class="day">11</span><span class="day">12</span><span class="day">13</span><span class="day">14</span>
+              <span class="day">15</span><span class="day">16</span><span class="day">17</span><span class="day">18</span><span class="day reserved reserved-start">19</span><span class="day reserved">20</span><span class="day reserved">21</span>
+              <span class="day reserved">22</span><span class="day reserved">23</span><span class="day reserved">24</span><span class="day reserved">25</span><span class="day reserved">26</span><span class="day reserved">27</span><span class="day reserved reserved-end">28</span>
+              <span class="day">29</span><span class="day">30</span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span>
+            </div>
+          </div>
+
+          <div class="month-card">
+            <div class="month-name"><span class="en">July</span><span class="hu">Július</span><span class="ro">Iulie</span><span class="de">Juli</span></div>
+            <div class="calendar-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="calendar-days">
+              <span class="day muted"></span><span class="day muted"></span><span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span><span class="day">5</span>
+              <span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day">10</span><span class="day">11</span><span class="day">12</span>
+              <span class="day">13</span><span class="day">14</span><span class="day">15</span><span class="day">16</span><span class="day">17</span><span class="day">18</span><span class="day">19</span>
+              <span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day">24</span><span class="day">25</span><span class="day">26</span>
+              <span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span><span class="day">31</span><span class="day muted"></span><span class="day muted"></span>
+            </div>
+          </div>
+
+          <div class="month-card">
+            <div class="month-name"><span class="en">August</span><span class="hu">Augusztus</span><span class="ro">August</span><span class="de">August</span></div>
+            <div class="calendar-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="calendar-days">
+              <span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day">1</span><span class="day">2</span>
+              <span class="day booked booked-start">3</span><span class="day booked">4</span><span class="day booked">5</span><span class="day booked">6</span><span class="day booked">7</span><span class="day booked">8</span><span class="day booked booked-end">9</span>
+              <span class="day">10</span><span class="day">11</span><span class="day">12</span><span class="day">13</span><span class="day">14</span><span class="day">15</span><span class="day">16</span>
+              <span class="day">17</span><span class="day">18</span><span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span>
+              <span class="day">24</span><span class="day">25</span><span class="day">26</span><span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span>
+              <span class="day">31</span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span><span class="day muted"></span>
+            </div>
+          </div>
+        </div>
+        <div class="availability-legend">
+          <span class="legend-mark free"><span class="en">Available</span><span class="hu">Szabad</span><span class="ro">Disponibil</span><span class="de">Frei</span></span>
+          <span class="legend-mark"><span class="en">Booked</span><span class="hu">Foglalt</span><span class="ro">Ocupat</span><span class="de">Gebucht</span></span>
+          <span class="legend-mark reserved"><span class="en">On hold</span><span class="hu">Függőben</span><span class="ro">În așteptare</span><span class="de">Angefragt</span></span>
+          <span><span class="en">Other dates by enquiry</span><span class="hu">Más dátumokról érdeklődj</span><span class="ro">Alte date la cerere</span><span class="de">Weitere Termine auf Anfrage</span></span>
+        </div>
+        <p class="availability-note">
+          <span class="en">This calendar is informational only and does not confirm a reservation.</span>
+          <span class="hu">A naptár tájékoztató jellegű, nem jelent végleges foglalást.</span>
+          <span class="ro">Calendarul este informativ și nu confirmă o rezervare.</span>
+          <span class="de">Dieser Kalender ist nur informativ und bestätigt keine Reservierung.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <p class="section-label">
@@ -1667,7 +1892,7 @@
     function setLang(lang) {
       document.body.classList.remove('lang-en','lang-hu','lang-ro','lang-de');
       document.body.classList.add('lang-' + lang);
-      ['en','hu','ro','de'].forEach(l => {
+      ['hu','en','de','ro'].forEach(l => {
         document.getElementById('btn-' + l).classList.toggle('active', l === lang);
       });
       localStorage.setItem('hat-lang', lang);
@@ -1688,7 +1913,7 @@
 
     // ── Restore preferences ──
     (function init() {
-      const lang = localStorage.getItem('hat-lang') || 'en';
+      const lang = localStorage.getItem('hat-lang') || 'hu';
       const theme = localStorage.getItem('hat-theme') || 'light';
       setLang(lang);
       if (theme === 'dark') {
