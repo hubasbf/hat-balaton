@@ -1,11 +1,10 @@
-const calendarWindow = {
-  start: "2026-05-01",
-  end: "2026-08-31"
-};
 const calendarTimezone = "Europe/Budapest";
+const monthsBeforeCurrent = 1;
+const monthsAfterCurrent = 18;
 
 exports.handler = async () => {
   const icsUrl = process.env.GOOGLE_CALENDAR_ICS_URL;
+  const calendarWindow = createCalendarWindow(new Date());
 
   if (!icsUrl) {
     return json({ source: "missing-config", events: [], message: "Set GOOGLE_CALENDAR_ICS_URL to read live Google Calendar data." }, 503);
@@ -20,7 +19,8 @@ exports.handler = async () => {
     const ics = await response.text();
     return json({
       source: "google-calendar",
-      events: parseIcsEvents(ics)
+      window: calendarWindow,
+      events: parseIcsEvents(ics, calendarWindow)
     });
   } catch (error) {
     return json({ source: "error", events: [], message: error.message }, 502);
@@ -38,14 +38,15 @@ function json(body, statusCode = 200) {
   };
 }
 
-function parseIcsEvents(ics) {
+function parseIcsEvents(ics, calendarWindow) {
   return unfoldIcs(ics)
     .split("BEGIN:VEVENT")
     .slice(1)
     .map((block) => block.split("END:VEVENT")[0])
     .map(parseEventBlock)
     .filter(Boolean)
-    .filter((event) => event.end >= calendarWindow.start && event.start <= calendarWindow.end);
+    .filter((event) => event.end >= calendarWindow.start && event.start <= calendarWindow.end)
+    .map(({ status, start, end }) => ({ status, start, end }));
 }
 
 function unfoldIcs(ics) {
@@ -116,6 +117,26 @@ function addDays(isoDate, days) {
   const date = new Date(`${isoDate}T00:00:00Z`);
   date.setUTCDate(date.getUTCDate() + days);
   return date.toISOString().slice(0, 10);
+}
+
+function addMonths(isoDate, months) {
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + months);
+  return date.toISOString().slice(0, 10);
+}
+
+function lastDayOfMonth(isoDate) {
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + 1, 0);
+  return date.toISOString().slice(0, 10);
+}
+
+function createCalendarWindow(date) {
+  const parts = dateParts(date, calendarTimezone);
+  const currentMonthStart = `${parts.year}-${parts.month}-01`;
+  const start = addMonths(currentMonthStart, -monthsBeforeCurrent);
+  const end = lastDayOfMonth(addMonths(currentMonthStart, monthsAfterCurrent));
+  return { start, end };
 }
 
 function parseUtcDateTime(value) {

@@ -686,12 +686,104 @@
       line-height: 1.9;
     }
     .availability-board {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      display: flex;
       gap: 1px;
       background: var(--border);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .availability-board::-webkit-scrollbar {
+      display: none;
+    }
+    .availability-shell {
+      position: relative;
+      overflow: visible;
+    }
+    .availability-shell::before,
+    .availability-shell::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 56px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .availability-shell::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg) 0%, transparent 100%);
+    }
+    .availability-shell::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg) 0%, transparent 100%);
+    }
+    .availability-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+    .availability-window {
+      color: var(--text);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .availability-hint {
+      color: var(--text-mid);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .availability-nav {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-card) 82%, transparent);
+      color: var(--text-mid);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-family: inherit;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(-50%) scale(0.96);
+      transition: opacity 0.2s, transform 0.2s, border-color 0.2s, color 0.2s, background 0.2s;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+    .availability-nav.prev {
+      left: -19px;
+    }
+    .availability-nav.next {
+      right: -19px;
+    }
+    .availability-shell:hover .availability-nav,
+    .availability-shell:focus-within .availability-nav {
+      opacity: 0.72;
+      transform: translateY(-50%) scale(1);
+    }
+    .availability-nav:hover,
+    .availability-nav:focus-visible {
+      border-color: var(--teal);
+      color: var(--teal);
+      opacity: 1;
+      outline: none;
+    }
+    body.dark .availability-nav:hover,
+    body.dark .availability-nav:focus-visible {
+      background: rgba(122, 206, 198, 0.08);
     }
     .month-card {
+      flex: 0 0 calc((100% - 2px) / 3);
+      scroll-snap-align: start;
       background: var(--bg-card);
       padding: 28px 24px 24px;
       min-height: 360px;
@@ -1137,7 +1229,8 @@
       .room-grid.cols-3 .img-wrap { height: 200px; }
       .features-grid { grid-template-columns: 1fr 1fr; }
       .nearby-inner { grid-template-columns: 1fr; gap: 40px; }
-      .availability-board { grid-template-columns: repeat(2, 1fr); }
+      .month-card { flex-basis: calc((100% - 1px) / 2); }
+      .availability-header { flex-direction: column; align-items: flex-start; gap: 8px; }
       .stay-inner { grid-template-columns: 1fr; gap: 40px; }
       #location { grid-template-columns: 1fr; gap: 40px; padding: 72px 24px; }
       .location-map { height: 280px; }
@@ -1152,7 +1245,11 @@
     @media (max-width: 540px) {
       .features-grid { grid-template-columns: 1fr; }
       .nearby-grid { grid-template-columns: 1fr; }
-      .availability-board { grid-template-columns: 1fr; }
+      .month-card { flex-basis: 100%; }
+      .availability-shell { overflow: hidden; }
+      .availability-nav { width: 36px; height: 36px; opacity: 0.62; }
+      .availability-nav.prev { left: 8px; }
+      .availability-nav.next { right: 8px; }
       .month-card { min-height: auto; }
       .stay-list { grid-template-columns: 1fr; }
       .shoreline-grid {
@@ -1784,14 +1881,24 @@
           <span class="de">Sehen Sie,<br/>welche Daten frei sind</span>
         </h2>
         <div class="section-rule"></div>
-        <p class="en">Booked and on-hold periods are marked below for the Balaton season. For dates outside May-August, or for the most current availability, just contact us.</p>
-        <p class="hu">A balatoni szezon foglalt és függőben lévő időszakai lent láthatók. Májustól augusztusig kívüli dátumokért, vagy a legfrissebb elérhetőségért írj nekünk.</p>
-        <p class="ro">Perioadele ocupate și în așteptare pentru sezonul Balaton sunt marcate mai jos. Pentru date în afara lunilor mai-august sau pentru disponibilitatea actuală, contactează-ne.</p>
-        <p class="de">Gebuchte und angefragte Zeiträume der Balaton-Saison sind unten markiert. Für Termine außerhalb von Mai-August oder die aktuellste Verfügbarkeit schreiben Sie uns einfach.</p>
+        <p class="en">Booked and on-hold periods are marked below. Swipe or use the arrows to browse upcoming months, or contact us for the most current availability.</p>
+        <p class="hu">A foglalt és függőben lévő időszakok lent láthatók. Lapozz vagy használd a nyilakat a következő hónapokhoz, vagy írj nekünk a legfrissebb elérhetőségért.</p>
+        <p class="ro">Perioadele ocupate și în așteptare sunt marcate mai jos. Glisează sau folosește săgețile pentru lunile următoare ori contactează-ne pentru disponibilitatea actuală.</p>
+        <p class="de">Gebuchte und angefragte Zeiträume sind unten markiert. Wischen Sie oder nutzen Sie die Pfeile für weitere Monate, oder schreiben Sie uns für die aktuellste Verfügbarkeit.</p>
       </div>
 
       <div class="fade-in">
-        <div class="availability-board" id="availability-board"></div>
+        <div class="availability-header">
+          <div class="availability-window" id="availability-window"></div>
+          <div class="availability-hint">
+            <span class="en">Swipe or scroll</span><span class="hu">Lapozható</span><span class="ro">Glisează</span><span class="de">Wischbar</span>
+          </div>
+        </div>
+        <div class="availability-shell">
+          <button class="availability-nav prev" id="availability-prev" type="button" aria-label="Previous month">‹</button>
+          <div class="availability-board" id="availability-board"></div>
+          <button class="availability-nav next" id="availability-next" type="button" aria-label="Next month">›</button>
+        </div>
         <div class="availability-legend">
           <span class="legend-mark free"><span class="en">Available</span><span class="hu">Szabad</span><span class="ro">Disponibil</span><span class="de">Frei</span></span>
           <span class="legend-mark"><span class="en">Booked</span><span class="hu">Foglalt</span><span class="ro">Ocupat</span><span class="de">Gebucht</span></span>
@@ -1853,7 +1960,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">HÁT · Balatonszemes</div>
-    <div class="footer-copy">© 2026</div>
+    <div class="footer-copy">© <span id="footer-year"></span></div>
   </footer>
 
   <!-- LIGHTBOX -->
@@ -1931,20 +2038,36 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
 
     // ── Availability calendar ──
-    const availabilityMonths = [
-      { index: 4, names: { en: 'May', hu: 'Május', ro: 'Mai', de: 'Mai' } },
-      { index: 5, names: { en: 'June', hu: 'Június', ro: 'Iunie', de: 'Juni' } },
-      { index: 6, names: { en: 'July', hu: 'Július', ro: 'Iulie', de: 'Juli' } },
-      { index: 7, names: { en: 'August', hu: 'Augusztus', ro: 'August', de: 'August' } }
+    const availabilityMonthNames = [
+      { en: 'January', hu: 'Január', ro: 'Ianuarie', de: 'Januar' },
+      { en: 'February', hu: 'Február', ro: 'Februarie', de: 'Februar' },
+      { en: 'March', hu: 'Március', ro: 'Martie', de: 'März' },
+      { en: 'April', hu: 'Április', ro: 'Aprilie', de: 'April' },
+      { en: 'May', hu: 'Május', ro: 'Mai', de: 'Mai' },
+      { en: 'June', hu: 'Június', ro: 'Iunie', de: 'Juni' },
+      { en: 'July', hu: 'Július', ro: 'Iulie', de: 'Juli' },
+      { en: 'August', hu: 'Augusztus', ro: 'August', de: 'August' },
+      { en: 'September', hu: 'Szeptember', ro: 'Septembrie', de: 'September' },
+      { en: 'October', hu: 'Október', ro: 'Octombrie', de: 'Oktober' },
+      { en: 'November', hu: 'November', ro: 'Noiembrie', de: 'November' },
+      { en: 'December', hu: 'December', ro: 'Decembrie', de: 'Dezember' }
     ];
+    let availabilityEvents = [];
+    let availabilityWindow = defaultAvailabilityWindow();
+    let availabilityMonths = [];
+    let availabilityScrollTimer;
 
     function renderAvailabilityCalendar(events) {
       const board = document.getElementById('availability-board');
       if (!board) return;
 
-      board.innerHTML = availabilityMonths.map(month => renderMonth(2026, month, events)).join('');
+      availabilityMonths = monthsBetween(availabilityWindow.start, availabilityWindow.end);
+      board.innerHTML = availabilityMonths.map(month => renderMonth(month.year, month, events)).join('');
+      scrollAvailabilityToMonth(firstDayOfMonth(new Date()), 'auto');
+      updateAvailabilityWindow();
     }
 
     function renderMonth(year, month, events) {
@@ -1971,15 +2094,38 @@
 
       return `
         <div class="month-card">
-          <div class="month-name">${localizedSpans(month.names)}</div>
+          <div class="month-name">${localizedSpans(withYear(month.names, year))}</div>
           <div class="calendar-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
           <div class="calendar-days">${cells.join('')}</div>
         </div>
       `;
     }
 
+    function renderAvailabilityWindow(months) {
+      const label = document.getElementById('availability-window');
+      if (!label || months.length === 0) return;
+
+      const first = months[0];
+      const last = months[months.length - 1];
+      label.innerHTML = localizedSpans({
+        en: `${first.names.en} ${first.year} - ${last.names.en} ${last.year}`,
+        hu: `${first.names.hu} ${first.year} - ${last.names.hu} ${last.year}`,
+        ro: `${first.names.ro} ${first.year} - ${last.names.ro} ${last.year}`,
+        de: `${first.names.de} ${first.year} - ${last.names.de} ${last.year}`
+      });
+    }
+
     function localizedSpans(labels) {
       return `<span class="en">${labels.en}</span><span class="hu">${labels.hu}</span><span class="ro">${labels.ro}</span><span class="de">${labels.de}</span>`;
+    }
+
+    function withYear(labels, year) {
+      return {
+        en: `${labels.en} ${year}`,
+        hu: `${labels.hu} ${year}`,
+        ro: `${labels.ro} ${year}`,
+        de: `${labels.de} ${year}`
+      };
     }
 
     function matchingAvailabilityRange(date, events) {
@@ -2002,6 +2148,102 @@
       return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     }
 
+    function firstDayOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+
+    function addMonthsToDate(date, months) {
+      return new Date(date.getFullYear(), date.getMonth() + months, 1);
+    }
+
+    function monthDescriptor(date) {
+      const index = date.getMonth();
+      return {
+        index,
+        year: date.getFullYear(),
+        names: availabilityMonthNames[index]
+      };
+    }
+
+    function defaultAvailabilityWindow() {
+      const currentMonth = firstDayOfMonth(new Date());
+      return {
+        start: isoDateFromDate(addMonthsToDate(currentMonth, -1)),
+        end: isoDateFromDate(lastDayOfMonth(addMonthsToDate(currentMonth, 18)))
+      };
+    }
+
+    function monthsBetween(startIso, endIso) {
+      const months = [];
+      let cursor = parseIsoMonth(startIso);
+      const end = parseIsoMonth(endIso);
+
+      while (cursor <= end) {
+        months.push(monthDescriptor(cursor));
+        cursor = addMonthsToDate(cursor, 1);
+      }
+
+      return months;
+    }
+
+    function parseIsoMonth(isoDate) {
+      return new Date(Number(isoDate.slice(0, 4)), Number(isoDate.slice(5, 7)) - 1, 1);
+    }
+
+    function isoDateFromDate(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    function lastDayOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+
+    function availabilityCardWidth() {
+      const board = document.getElementById('availability-board');
+      const card = board?.querySelector('.month-card');
+      if (!board || !card) return 0;
+      const gap = parseFloat(getComputedStyle(board).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    function visibleAvailabilityStartIndex() {
+      const board = document.getElementById('availability-board');
+      const width = availabilityCardWidth();
+      if (!board || !width) return 0;
+      return Math.max(0, Math.min(availabilityMonths.length - 1, Math.round(board.scrollLeft / width)));
+    }
+
+    function visibleAvailabilityCount() {
+      const board = document.getElementById('availability-board');
+      const width = availabilityCardWidth();
+      if (!board || !width) return 1;
+      return Math.max(1, Math.round(board.clientWidth / width));
+    }
+
+    function updateAvailabilityWindow() {
+      if (availabilityMonths.length === 0) return;
+      const startIndex = visibleAvailabilityStartIndex();
+      const endIndex = Math.min(availabilityMonths.length - 1, startIndex + visibleAvailabilityCount() - 1);
+      renderAvailabilityWindow([availabilityMonths[startIndex], availabilityMonths[endIndex]]);
+    }
+
+    function scrollAvailabilityBy(months) {
+      const board = document.getElementById('availability-board');
+      const width = availabilityCardWidth();
+      if (!board || !width) return;
+      board.scrollBy({ left: width * months, behavior: 'smooth' });
+    }
+
+    function scrollAvailabilityToMonth(date, behavior = 'smooth') {
+      const board = document.getElementById('availability-board');
+      const width = availabilityCardWidth();
+      if (!board || !width) return;
+
+      const targetIndex = availabilityMonths.findIndex(month => month.year === date.getFullYear() && month.index === date.getMonth());
+      if (targetIndex === -1) return;
+      board.scrollTo({ left: width * targetIndex, behavior });
+    }
+
     async function loadAvailability() {
       renderAvailabilityCalendar([]);
       setAvailabilityStatus({
@@ -2016,9 +2258,14 @@
         if (!response.ok) throw new Error('Availability feed unavailable');
 
         const data = await response.json();
-        renderAvailabilityCalendar(Array.isArray(data.events) ? data.events : []);
+        availabilityEvents = Array.isArray(data.events) ? data.events : [];
+        if (data.window?.start && data.window?.end) {
+          availabilityWindow = data.window;
+        }
+        renderAvailabilityCalendar(availabilityEvents);
         setAvailabilityStatus('');
       } catch (error) {
+        availabilityEvents = [];
         renderAvailabilityCalendar([]);
         setAvailabilityStatus({
           en: 'Current availability could not be loaded. Please contact us for dates.',
@@ -2040,6 +2287,13 @@
 
       status.innerHTML = localizedSpans(message);
     }
+
+    document.getElementById('availability-prev')?.addEventListener('click', () => scrollAvailabilityBy(-1));
+    document.getElementById('availability-next')?.addEventListener('click', () => scrollAvailabilityBy(1));
+    document.getElementById('availability-board')?.addEventListener('scroll', () => {
+      window.clearTimeout(availabilityScrollTimer);
+      availabilityScrollTimer = window.setTimeout(updateAvailabilityWindow, 60);
+    }, { passive: true });
 
     loadAvailability();
 
