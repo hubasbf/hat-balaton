@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { createReadStream, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { onRequestGet as cloudflareAvailabilityHandler } from './functions/api/availability.js';
 import { handler as availabilityHandler } from './netlify/functions/availability.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,6 +30,13 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
+    if (url.pathname === '/api/availability') {
+      const result = await cloudflareAvailabilityHandler({ env: process.env });
+      res.writeHead(result.status, Object.fromEntries(result.headers));
+      res.end(await result.text());
+      return;
+    }
+
     if (url.pathname === '/.netlify/functions/availability') {
       const result = await availabilityHandler({ httpMethod: req.method, queryStringParameters: Object.fromEntries(url.searchParams) });
       res.writeHead(result.statusCode || 200, result.headers || { 'Content-Type': 'application/json' });
@@ -53,7 +61,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(port, host, () => {
   console.log(`Local preview running at http://${host}:${port}`);
-  console.log(`Availability source: ${process.env.GOOGLE_CALENDAR_ICS_URL ? 'GOOGLE_CALENDAR_ICS_URL from local env' : 'fallback data'}`);
+  console.log(`Availability source: ${process.env.GOOGLE_CALENDAR_ICS_URL ? 'GOOGLE_CALENDAR_ICS_URL from local env' : 'missing local calendar env'}`);
 });
 
 async function loadLocalEnv() {
